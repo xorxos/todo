@@ -40,8 +40,11 @@ const changeTodoStatus = async (req, res) => {
   res.status(StatusCodes.OK).json({ updatedTodo });
 };
 
-const clearCompletedTodos = (req, res) => {
-  res.status(StatusCodes.OK).json({ msg: "clear completed todos" });
+const clearCompletedTodos = async (req, res) => {
+  const completedTodos = await ToDo.find({ status: "completed" });
+  const idList = completedTodos.map((item) => item._id);
+  await ToDo.deleteMany({ _id: { $in: idList } });
+  res.status(StatusCodes.OK).json({ completedTodos });
 };
 
 export { createTodo, getAllTodos, clearCompletedTodos, changeTodoStatus };
