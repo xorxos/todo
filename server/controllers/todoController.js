@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes";
 import BadRequestError from "../errors/bad-request.js";
+import NotFoundError from "../errors/not-found.js";
 
 import ToDo from "../models/ToDo.js";
 
@@ -21,7 +22,11 @@ const getAllTodos = async (req, res) => {
 const completeTodo = async (req, res) => {
   const { id: todoId } = req.params;
 
-  //check if todo is found
+  // check if todo is found
+  const todo = await ToDo.findOne({ _id: todoId });
+  if (!todo) throw new NotFoundError(`No todo found with id: ${todoId}`);
+
+  // change todo to completed
   const completedTodo = await ToDo.findOneAndUpdate(
     { _id: todoId },
     { status: "completed" },
