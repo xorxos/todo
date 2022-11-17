@@ -12,16 +12,26 @@ const createTodo = async (req, res) => {
   res.status(StatusCodes.CREATED).json({ newToDo });
 };
 
-const getAllTodos = (req, res) => {
-  res.status(StatusCodes.OK).json({ msg: "get todos" });
+const getAllTodos = async (req, res) => {
+  const todoItems = await ToDo.find();
+  const totalItems = await ToDo.countDocuments();
+  res.status(StatusCodes.OK).json({ todoItems, totalItems });
+};
+
+const completeTodo = async (req, res) => {
+  const { id: todoId } = req.params;
+
+  //check if todo is found
+  const completedTodo = await ToDo.findOneAndUpdate(
+    { _id: todoId },
+    { status: "completed" },
+    { new: true }
+  );
+  res.status(StatusCodes.OK).json({ completedTodo });
 };
 
 const clearCompletedTodos = (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "clear completed todos" });
-};
-
-const completeTodo = (req, res) => {
-  res.status(StatusCodes.OK).json({ msg: "complete todo" });
 };
 
 export { createTodo, getAllTodos, clearCompletedTodos, completeTodo };
