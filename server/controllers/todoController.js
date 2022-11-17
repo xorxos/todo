@@ -19,24 +19,29 @@ const getAllTodos = async (req, res) => {
   res.status(StatusCodes.OK).json({ todoItems, totalItems });
 };
 
-const completeTodo = async (req, res) => {
+const changeTodoStatus = async (req, res) => {
   const { id: todoId } = req.params;
 
   // check if todo is found
   const todo = await ToDo.findOne({ _id: todoId });
   if (!todo) throw new NotFoundError(`No todo found with id: ${todoId}`);
 
+  let newTodoStatus = "completed";
+  if (todo.status === "completed") {
+    newTodoStatus = "pending";
+  }
+
   // change todo to completed
-  const completedTodo = await ToDo.findOneAndUpdate(
+  const updatedTodo = await ToDo.findOneAndUpdate(
     { _id: todoId },
-    { status: "completed" },
+    { status: newTodoStatus },
     { new: true }
   );
-  res.status(StatusCodes.OK).json({ completedTodo });
+  res.status(StatusCodes.OK).json({ updatedTodo });
 };
 
 const clearCompletedTodos = (req, res) => {
   res.status(StatusCodes.OK).json({ msg: "clear completed todos" });
 };
 
-export { createTodo, getAllTodos, clearCompletedTodos, completeTodo };
+export { createTodo, getAllTodos, clearCompletedTodos, changeTodoStatus };
