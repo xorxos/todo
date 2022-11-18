@@ -5,6 +5,14 @@ import morgan from "morgan";
 import notFoundMiddleware from "./middleware/not-found.js";
 import errorHandlerMiddleware from "./middleware/error-handler.js";
 
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
+
+import helmet from "helmet";
+import xss from "xss-clean";
+import mongoSanitize from "express-mongo-sanitize";
+
 //routers
 import todoRouter from "./routes/todoRoutes.js";
 import connectDB from "./db/connect.js";
@@ -14,12 +22,24 @@ dotenv.config();
 
 app.use(express.json());
 
+// secure headers
+app.use(helmet());
+
+// sanitize input
+app.use(xss());
+
+// prevent mongoDB injection
+app.use(mongoSanitize());
+
 // Morgan will log http requests to console
 if (process.env.NODE_ENV !== "production") {
   app.use(morgan("dev"));
 }
 
 const PORT = process.env.PORT || 5000;
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+app.use(express.static(path.resolve(__dirname, "../client/build")));
 
 //routes
 app.get("/", (req, res) => {
@@ -31,6 +51,10 @@ app.get("/api/v1", (req, res) => {
 });
 
 app.use("/api/v1/todos", todoRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/build", "index.html"));
+});
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
