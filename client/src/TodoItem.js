@@ -13,7 +13,7 @@ const TodoItem = ({ item }) => {
       ) : (
         <BsCircle className="text-xl" />
       )}
-      <p className={`px-3 text-xl m-w-1/2 whitespace-nowrap truncate ${item.status === "completed" ? "line-through" : ""}`}>
+      <p className={`px-3 text-xl max-w-70 truncate ${item.status === "completed" ? "line-through" : ""}`}>
         {item.todo}
       </p>
     </div>
