@@ -11,7 +11,8 @@ const createTodo = async (req, res) => {
 
   await ToDo.create(req.body);
   const updatedTodoList = await ToDo.find({});
-  res.status(StatusCodes.CREATED).json({ updatedTodoList });
+  const totalItems = await ToDo.countDocuments();
+  res.status(StatusCodes.CREATED).json({ updatedTodoList, totalItems });
 };
 
 const getAllTodos = async (req, res) => {
@@ -40,7 +41,8 @@ const changeTodoStatus = async (req, res) => {
   );
 
   const updatedTodoList = await ToDo.find({});
-  res.status(StatusCodes.OK).json({ updatedTodoList });
+  const totalItems = await ToDo.countDocuments();
+  res.status(StatusCodes.OK).json({ updatedTodoList, totalItems });
 };
 
 const clearCompletedTodos = async (req, res) => {
@@ -49,7 +51,8 @@ const clearCompletedTodos = async (req, res) => {
   await ToDo.deleteMany({ _id: { $in: idList } });
 
   const updatedTodoList = await ToDo.find({});
-  res.status(StatusCodes.OK).json({ updatedTodoList });
+  const totalItems = await ToDo.countDocuments();
+  res.status(StatusCodes.OK).json({ updatedTodoList, totalItems });
 };
 
 export { createTodo, getAllTodos, clearCompletedTodos, changeTodoStatus };
