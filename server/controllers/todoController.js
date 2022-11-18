@@ -14,7 +14,7 @@ const createTodo = async (req, res) => {
 };
 
 const getAllTodos = async (req, res) => {
-  const todoItems = await ToDo.find();
+  const todoItems = await ToDo.find({});
   const totalItems = await ToDo.countDocuments();
   res.status(StatusCodes.OK).json({ todoItems, totalItems });
 };
