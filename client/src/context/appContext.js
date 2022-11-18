@@ -45,9 +45,12 @@ const AppProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
-      await axios.post(baseURL + "/todos", { todo });
+      const { data } = await axios.post(baseURL + "/todos", { todo });
+      const { updatedTodoList, totalItems } = data;
+      
+      setTodoList(updatedTodoList);
+      setTodoCount(totalItems);
       setIsLoading(false);
-      getTodos();
       displayAlert("Todo created", "success");
     } catch (error) {
       setIsLoading(false);
@@ -59,9 +62,12 @@ const AppProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
-      await axios.patch(baseURL + `/todos/${id}`);
+      const { data } = await axios.patch(baseURL + `/todos/${id}`);
+      const { updatedTodoList, totalItems } = data;
+
+      setTodoList(updatedTodoList);
+      setTodoCount(totalItems);
       setIsLoading(false);
-      getTodos();
       displayAlert("Todo updated!", "success");
     } catch (error) {
       setIsLoading(false);
@@ -73,9 +79,12 @@ const AppProvider = ({ children }) => {
     setIsLoading(true);
 
     try {
-      await axios.post(baseURL + "/todos/clear");
+      const { data } = await axios.post(baseURL + "/todos/clear");
+      const { updatedTodoList, totalItems } = data;
+
+      setTodoList(updatedTodoList);
+      setTodoCount(totalItems);
       setIsLoading(false);
-      getTodos();
       displayAlert("Completed todos have been cleared!", "success");
     } catch (error) {
       setIsLoading(false);
