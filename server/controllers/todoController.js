@@ -9,8 +9,9 @@ const createTodo = async (req, res) => {
 
   if (!todo) throw new BadRequestError("Please provide all values");
 
-  const newToDo = await ToDo.create(req.body);
-  res.status(StatusCodes.CREATED).json({ newToDo });
+  await ToDo.create(req.body);
+  const updatedTodoList = await ToDo.find({});
+  res.status(StatusCodes.CREATED).json({ updatedTodoList });
 };
 
 const getAllTodos = async (req, res) => {
@@ -37,14 +38,18 @@ const changeTodoStatus = async (req, res) => {
     { status: newTodoStatus },
     { new: true }
   );
-  res.status(StatusCodes.OK).json({ updatedTodo });
+
+  const updatedTodoList = await ToDo.find({});
+  res.status(StatusCodes.OK).json({ updatedTodoList });
 };
 
 const clearCompletedTodos = async (req, res) => {
   const completedTodos = await ToDo.find({ status: "completed" });
   const idList = completedTodos.map((item) => item._id);
   await ToDo.deleteMany({ _id: { $in: idList } });
-  res.status(StatusCodes.OK).json({ completedTodos });
+
+  const updatedTodoList = await ToDo.find({});
+  res.status(StatusCodes.OK).json({ updatedTodoList });
 };
 
 export { createTodo, getAllTodos, clearCompletedTodos, changeTodoStatus };
