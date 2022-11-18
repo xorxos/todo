@@ -24,8 +24,6 @@ const AppProvider = ({ children }) => {
   };
 
   const getTodos = async () => {
-    setIsLoading(true);
-
     const url = baseURL + "/todos";
 
     try {
@@ -34,60 +32,52 @@ const AppProvider = ({ children }) => {
 
       setTodoList(todoItems);
       setTodoCount(totalItems);
-      setIsLoading(false);
     } catch (error) {
-      setIsLoading(false);
       displayAlert(error, "danger");
     }
   };
 
-  const createTodo = async (todo) => {
-    setIsLoading(true);
-
+  const createTodo = async (todo, isCreating) => {
     try {
       const { data } = await axios.post(baseURL + "/todos", { todo });
       const { updatedTodoList, totalItems } = data;
-      
+
       setTodoList(updatedTodoList);
       setTodoCount(totalItems);
-      setIsLoading(false);
+      isCreating(false);
       displayAlert("Todo created", "success");
     } catch (error) {
-      setIsLoading(false);
+      isCreating(false);
       displayAlert(error, "danger");
     }
   };
 
-  const toggleTodoStatus = async (id) => {
-    setIsLoading(true);
-
+  const toggleTodoStatus = async (id, setIsItemLoading) => {
     try {
       const { data } = await axios.patch(baseURL + `/todos/${id}`);
       const { updatedTodoList, totalItems } = data;
 
       setTodoList(updatedTodoList);
       setTodoCount(totalItems);
-      setIsLoading(false);
+      setIsItemLoading(false);
       displayAlert("Todo updated!", "success");
     } catch (error) {
-      setIsLoading(false);
+      setIsItemLoading(false);
       displayAlert(error, "danger");
     }
   };
 
-  const clearCompleted = async () => {
-    setIsLoading(true);
-
+  const clearCompleted = async (setClearCompletedLoading) => {
     try {
       const { data } = await axios.post(baseURL + "/todos/clear");
       const { updatedTodoList, totalItems } = data;
 
       setTodoList(updatedTodoList);
       setTodoCount(totalItems);
-      setIsLoading(false);
+      setClearCompletedLoading(false);
       displayAlert("Completed todos have been cleared!", "success");
     } catch (error) {
-      setIsLoading(false);
+      setClearCompletedLoading(false);
       displayAlert(error, "danger");
     }
   };

@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { TbCornerRightDown } from "react-icons/tb";
 import { useAppContext } from "./context/appContext";
+import Spinner from "./Spinner";
 
 const Form = () => {
   const { createTodo, displayAlert } = useAppContext();
   const [value, setValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (value === "") {
@@ -12,7 +15,8 @@ const Form = () => {
       return;
     }
 
-    createTodo(value);
+    setIsLoading(true);
+    createTodo(value, setIsLoading);
   };
 
   return (
@@ -29,7 +33,7 @@ const Form = () => {
         title="add todo"
         className="text-white text-2xl rounded-r-md border my-8 py-2.5 px-4"
       >
-        <TbCornerRightDown />
+        {isLoading ? <Spinner createTodo /> : <TbCornerRightDown />}
       </button>
     </form>
   );
