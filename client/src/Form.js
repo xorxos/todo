@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { TbCornerRightDown } from "react-icons/tb";
 
 const Form = () => {
+  const [value, setValue] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("create todo");
@@ -11,6 +13,8 @@ const Form = () => {
       <input
         className="shadow flex-1 appearance-none border rounded-l-md my-8 py-3 px-3 text-gray-800 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
         placeholder="Create a new todo..."
       />
       <button

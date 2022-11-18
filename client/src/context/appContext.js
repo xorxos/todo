@@ -30,7 +30,7 @@ const AppProvider = ({ children }) => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      displayAlert(error.response.data.message, "danger");
+      displayAlert(error, "danger");
     }
   };
 
