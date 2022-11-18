@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { TbCornerRightDown } from "react-icons/tb";
+import { useAppContext } from "./context/appContext";
 
 const Form = () => {
+  const { createTodo, displayAlert } = useAppContext();
   const [value, setValue] = useState("");
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("create todo");
+    if (value === "") {
+      displayAlert("You cannot create a blank todo!", "danger");
+      return;
+    }
+
+    createTodo(value);
   };
 
   return (

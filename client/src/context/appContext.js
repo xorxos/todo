@@ -25,7 +25,6 @@ const AppProvider = ({ children }) => {
 
   const getTodos = async () => {
     setIsLoading(true);
-    console.log("getting todos");
 
     const url = baseURL + "/todos";
 
