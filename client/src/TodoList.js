@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useAppContext } from "./context/appContext";
 import TodoItem from "./TodoItem";
 import Menu from "./Menu";
